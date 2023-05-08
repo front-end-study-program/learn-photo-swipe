@@ -1,2 +1,3 @@
 # learn-photo-swipe
-学习 photoSwipe 库源码
+
+学习 [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) 图片预览库源码
