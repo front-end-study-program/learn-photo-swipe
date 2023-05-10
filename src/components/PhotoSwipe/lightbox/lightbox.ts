@@ -2,7 +2,8 @@ import PhotoSwipeBase from '../core/base'
 import type Content from '../slide/content'
 import type { PhotoSwipeOptions, Point, DataSource } from '../types'
 import { specialKeyUsed, getElementsFromOption } from '../utils/utils'
-import PhotoSwipe from '../photoswipe'
+// import PhotoSwipe from '../photoswipe'
+import { lazyLoadSlide } from '../slide/loader'
 
 /**
  * PhotoSwipe Lightbox
@@ -18,19 +19,29 @@ import PhotoSwipe from '../photoswipe'
  *  children - Element | Element[] | NodeList | gallery children 元素的字符串选择器
  */
 class PhotoSwipeLightbox extends PhotoSwipeBase {
-  options: PhotoSwipeOptions
+  // options: PhotoSwipeOptions
   _uid: number
   shouldOpen: boolean
   _preloadedContent: Content | undefined
   constructor (options: PhotoSwipeOptions) {
-    super()
-    this.options = options || {}
+    super(options)
+    // this.options = options || {}
     this._uid = 0
     this.shouldOpen = false
 
     this._preloadedContent = undefined
 
     this.onThumbnailsClick = this.onThumbnailsClick.bind(this)
+  }
+
+  /**
+   * 初始化灯箱，调用一次。
+   * 为元素绑定点击事件
+   */
+  init () {
+    getElementsFromOption(this.options.gallery, this.options.gallerySelector).forEach((galleryElement) => {
+      galleryElement.addEventListener('click', this.onThumbnailsClick, false)
+    })
   }
 
   onThumbnailsClick (e: MouseEvent) {
@@ -115,6 +126,10 @@ class PhotoSwipeLightbox extends PhotoSwipeBase {
       options.dataSource = dataSource
     }
 
-    const promiseArray: PhotoSwipe[] = []
+    if (options.preloadFirstSlide !== false && index >= 0) {
+      this._preloadedContent = lazyLoadSlide(index, this)
+    }
   }
 }
+
+export default PhotoSwipeLightbox

@@ -1,4 +1,4 @@
-import type { SlideData } from '../slide/slide'
+import type { SlideData } from './slide/slide'
 
 export type ElementProvider = string | NodeListOf<HTMLElement> | HTMLElement[] | HTMLElement;
 
@@ -12,8 +12,8 @@ export type DataSourceObject = {
   gallery: HTMLElement;
   items?: HTMLElement[];
 };
-
-export type DataSource = SlideData | DataSourceObject
+export type DataSourceArray = SlideData[];
+export type DataSource = DataSourceArray | DataSourceObject
 
 export type PreparedPhotoSwipeOptions = {
   dataSource?: DataSource | undefined;
@@ -26,6 +26,9 @@ export type PreparedPhotoSwipeOptions = {
    */
   index: number;
   initialPointerPos?: Point | null | undefined;
+  preloadFirstSlide?: boolean | undefined;
+  gallery?: ElementProvider | undefined;
+  gallerySelector?: string | undefined;
   children?: ElementProvider | undefined;
   childSelector?: string | undefined;
 }
