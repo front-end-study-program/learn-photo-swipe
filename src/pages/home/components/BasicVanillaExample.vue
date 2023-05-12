@@ -1,95 +1,31 @@
 <template>
   <div class="pswp-gallery">
     <PhotoProvider>
-      <PhotoView>
-        <img
-          src="../../../assets/images/img-200.jpg"
-          alt=""
-        >
-      </PhotoView>
-      <PhotoView>
-        <img
-          src="../../../assets/images/img-200 (2).jpg"
-          alt=""
-        >
-      </PhotoView>
-      <PhotoView>
-        <img
-          src="../../../assets/images/img-200 (3).jpg"
-          alt=""
-        >
-      </PhotoView>
-      <PhotoView>
-        <img
-          src="../../../assets/images/img-2500 (4).jpg"
-          alt=""
-        >
-      </PhotoView>
-      <!-- <a
-        href="../../../assets/images/img-2500.jpg"
-        data-pswp-width="1669"
-        data-pswp-height="2500"
-        target="_blank"
+      <PhotoConsumer
+        v-for="(img, idx) in images"
+        :key="idx"
+        class="mb-14"
+        :src="img"
       >
         <img
-          src="../../../assets/images/img-200.jpg"
+          :src="img"
           alt=""
         >
-      </a>
-      <a
-        href="../../../assets/images/img-2500 (1).jpg"
-        data-pswp-width="1875"
-        data-pswp-height="2500"
-        data-cropped="true"
-        target="_blank"
-      >
-        <img
-          src="../../../assets/images/img-200 (1).jpg"
-          alt=""
-        >
-        Cropped
-      </a>
-      <a
-        href="https://unsplash.com"
-        data-pswp-src="../../../assets/images/img-2500 (2).jpg"
-        data-pswp-width="2500"
-        data-pswp-height="1666"
-        target="_blank"
-      >
-        <img
-          src="../../../assets/images/img-200 (2).jpg"
-          alt=""
-        >
-      </a>
-      <a
-        href="http://example.com"
-        data-pswp-src="../../../assets/images/img-2500 (4).jpg"
-        data-pswp-width="2500"
-        data-pswp-height="1668"
-        target="_blank"
-      >
-        No thumbnail
-      </a>
-      <div>
-        <a
-          href="../../../assets/images/img-2500 (3).jpg"
-          data-pswp-width="2500"
-          data-pswp-height="1667"
-          target="_blank"
-        >
-          <img
-            src="../../../assets/images/img-200 (3).jpg"
-            alt=""
-          >
-        </a>
-      </div> -->
+      </PhotoConsumer>
     </PhotoProvider>
   </div>
 </template>
 
 <script setup lang="ts">
-import PhotoProvider from '~/components/PhotoSwipe/PhotoProvider.vue'
-import PhotoView from '~/components/PhotoSwipe/PhotoView.vue'
+import { PhotoProvider, PhotoConsumer } from '~/components/PhotoSwipe'
+
+const files = import.meta.glob<{default: string}>('~/assets/images/*', { eager: true })
+const images: string[] = []
+
+for (const key in files) {
+  images.push(files[key].default)
+}
+
 </script>
 
 <style lang="less" scoped>
@@ -101,11 +37,15 @@ import PhotoView from '~/components/PhotoSwipe/PhotoView.vue'
   position: relative;
   width: 155px;
 }
+
+.mb-14 {
+  margin-bottom: 14px;
+}
+
 img {
   display: block;
   position: relative;
   width: 120px;
-  margin-bottom: 18px;
   font-size: 14px;
   height: auto;
 }
